@@ -12,11 +12,13 @@ SOURCES += \
     battery.cpp \
     main.cpp \
     mainwindow.cpp \
+    mastercontrol.cpp \
     signalanalyser.cpp
 
 HEADERS += \
     battery.h \
     mainwindow.h \
+    mastercontrol.h \
     signalanalyser.h
 
 FORMS += \
