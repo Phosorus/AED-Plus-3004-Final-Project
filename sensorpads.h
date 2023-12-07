@@ -17,7 +17,6 @@ public:
     SensorPads();
     bool getWorking(); // check if this part is working
 
-
 public slots:
     void goodCompressionSlot();
     void badCompressionSlot();
@@ -33,7 +32,7 @@ signals:
     void sendAsystoleSignal(); // send asystoles signal
     void sendVTSignal(); // send vt signal
     void sendVFSignal(); /// sendd vf signal
-
+    void sendElectrodesSignal(); // send electrode signal
 };
 
 #endif // SENSORPADS_H
