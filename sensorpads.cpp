@@ -3,6 +3,7 @@
 // Connect to Heart sensor and Compression sensor signals and slots
 SensorPads::SensorPads()
 {
+    working = true;
     connect(this->cs, SIGNAL(sendGoodCompressionSignal()), this, SLOT(goodCompressionSlot()));
     connect(this->cs, SIGNAL(sendBadCompressionSignal()), this, SLOT(badCompressionSlot()));
     connect(this->hs, SIGNAL(sendPEASignal()), this, SLOT(peaSlot()));
