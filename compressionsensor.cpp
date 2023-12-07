@@ -11,3 +11,15 @@ bool CompressionSensor::getWorking(){
     return working;
 }
 
+void CompressionSensor::goodCompressionsSlot(){
+    sendGoodCompressionSignal();
+
+}
+
+void CompressionSensor::badCompressionsSlot(){
+    sendBadCompressionSignal();
+}
+
+void CompressionSensor::breathsSlot(){
+    sendBreaths();
+}

@@ -5,7 +5,11 @@
 class Battery
 {
 public:
-    Battery();
+    Battery(int n);
+    int deplete(int n);
+    int getCharge();
+
+private:
     int charge;
 };
 

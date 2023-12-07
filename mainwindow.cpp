@@ -48,6 +48,7 @@ void MainWindow::on_btnShockIndicator_clicked()
     /*
     Need to add colour changing for the ready charge and probably audio queue
     */
+
 }
 
 void MainWindow::on_btnStatus_clicked()
@@ -149,11 +150,13 @@ void MainWindow::on_btnCallHelp_clicked()
 
 void MainWindow::on_btnApplyCompressions_clicked()
 {
-    QString s = "Applies 20 chest compressions";
+    QString s = "Applies 1 chest compressions";
     s = "*" + s +"*";
     s = "USER: " + s;
     ui->ActionLog->append(s);
     //Somehow determine compression quality and have AED give feedback
+
+    applyCompressions();
 }
 
 void MainWindow::on_btnApplyBreathes_clicked()
@@ -162,6 +165,8 @@ void MainWindow::on_btnApplyBreathes_clicked()
     s = "*" + s +"*";
     s = "USER: " + s;
     ui->ActionLog->append(s);
+
+    applyBreaths();
 }
 
 
@@ -175,6 +180,8 @@ void MainWindow::on_btnAttachAdultPads_clicked()
     ui->ActionLog->append(s);
 
     //Maybe update the value of the AED class to reflect what pad is attached
+    //send attach symbols
+    attachAdultPads();
 }
 
 

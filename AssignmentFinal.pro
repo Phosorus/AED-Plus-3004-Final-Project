@@ -13,13 +13,27 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mastercontrol.cpp \
-    signalanalyser.cpp
+    patient.cpp \
+    signalanalyser.cpp \
+    compressionsensor.cpp \
+    heartsensor.cpp \
+    sensorpads.cpp \
+    pads.cpp \
+    shockers.cpp \
+
 
 HEADERS += \
     battery.h \
     mainwindow.h \
     mastercontrol.h \
-    signalanalyser.h
+    patient.h \
+    signalanalyser.h \
+    compressionsensor.h \
+    heartsensor.h \
+    sensorpads.h \
+    pads.h \
+    shockers.h \
+
 
 FORMS += \
     mainwindow.ui

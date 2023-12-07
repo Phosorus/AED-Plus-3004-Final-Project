@@ -38,6 +38,9 @@ signals:
     void powerOn();
     void attachChildPads();
     void attachAdultPads();
+    void shock();
+    void applyCompressions();
+    void applyBreaths();
 
 private:
     Ui::MainWindow *ui;

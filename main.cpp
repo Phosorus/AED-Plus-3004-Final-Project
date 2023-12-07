@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MasterControl* AED = new MasterControl();
+
     //AED->startAED();
 
     return a.exec();

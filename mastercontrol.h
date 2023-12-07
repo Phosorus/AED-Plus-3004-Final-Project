@@ -3,6 +3,11 @@
 
 #include "mainwindow.h"
 #include "battery.h"
+#include "shockers.h"
+#include "compressionsensor.h"
+#include "heartsensor.h"
+
+#include <QtDebug>
 #include <QObject>
 #include <QThread>
 #include <QTime>
@@ -22,18 +27,29 @@ public:
     bool diagnostics();
     void firstHalfSteps();
     void analysis();
-    void shock();
     void compressions(bool alignment);
-    void breaths();
     void powerOff();
+
+    MainWindow* w;
+    CompressionSensor* cs;
+    HeartSensor* hs;
 
 public slots:
     void startAED();
     void padsApplied();
+    void goodCompressions();
+    void badCompressions();
+    void breaths();
+    void shock();
 
 private:
+    bool currentlyShockable = false;
+    bool currentlyUnstable = true;
+    int numCompressions = 0;
+    int numBreaths = 0;
+
+    Shockers* shocker;
     Battery* battery;
-    MainWindow* w;
 
 signals:
 
