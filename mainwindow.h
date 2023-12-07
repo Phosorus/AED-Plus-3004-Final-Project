@@ -34,6 +34,11 @@ private slots:
 
     void on_btnAttachChildPads_clicked();
 
+signals:
+    void powerOn();
+    void attachChildPads();
+    void attachAdultPads();
+
 private:
     Ui::MainWindow *ui;
     int counter;

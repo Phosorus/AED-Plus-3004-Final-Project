@@ -18,6 +18,7 @@ MainWindow::~MainWindow()
 */
 void MainWindow::on_btnPowerButton_clicked()
 {
+
     /*
     Need to check power level
     Only after the power is on can you use the unit
@@ -32,6 +33,8 @@ void MainWindow::on_btnPowerButton_clicked()
     ui->ActionLog->append(s);
 
     */
+
+    powerOn();
 }
 
 void MainWindow::on_btnShockIndicator_clicked()
@@ -63,9 +66,6 @@ void MainWindow::on_btnStatus_clicked()
 }
 void MainWindow::stepIndicator(int i){
     if(i==1){
-        for(int y =0; y<1000; y++){
-
-        }
         ui->lblStep1->setStyleSheet("border: 4px solid  rgb(45, 255, 0); border-radius: 6px;");
         ui->lblStep2->setStyleSheet("border: 4px solid  rgb(175, 193, 204); border-radius: 6px;");
         ui->lblStep3->setStyleSheet("border: 4px solid  rgb(175, 193, 204); border-radius: 6px;");
@@ -125,6 +125,7 @@ void MainWindow::stepIndicator(int i){
         s = "AED: " + s;
         ui->ActionLog->append(s);
     }
+
 }
 
 
