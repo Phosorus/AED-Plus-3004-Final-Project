@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/Step1.png</file>
+        <file>assets/Step2.png</file>
+        <file>assets/Step3.png</file>
+        <file>assets/Step4.png</file>
+        <file>assets/Step5.png</file>
+        <file>assets/Step6.png</file>
+        <file>assets/Asystole.png</file>
+        <file>assets/fibrillation.png</file>
+        <file>assets/Sinus.png</file>
+        <file>assets/tachycardia.png</file>
+    </qresource>
+</RCC>

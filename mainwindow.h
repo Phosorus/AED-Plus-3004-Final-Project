@@ -16,31 +16,28 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void stepIndicator(int step);
+    void changeBatteryLevel(int i);
+    void graphDisplay(int i);
+    void statusCheck(bool);
+    void shockReady();
 
 private slots:
     void on_btnPowerButton_clicked();
-    void on_btnStatus_clicked();
     void on_btnShockIndicator_clicked();
+
 
     void on_btnCheckPatient_clicked();
     void on_btnCallHelp_clicked();
 
 
-    void on_btnApplyCompressions_clicked();
+    void on_btnApplyGoodCompression_clicked();
+    void on_btnApplyBadCompression_clicked();
 
     void on_btnApplyBreathes_clicked();
 
     void on_btnAttachAdultPads_clicked();
 
     void on_btnAttachChildPads_clicked();
-
-signals:
-    void powerOn();
-    void attachChildPads();
-    void attachAdultPads();
-    void shock();
-    void applyCompressions();
-    void applyBreaths();
 
 private:
     Ui::MainWindow *ui;
