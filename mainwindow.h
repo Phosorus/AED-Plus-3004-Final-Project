@@ -21,7 +21,7 @@ public:
     void statusCheck(bool);
     void shockReady();
 
-private slots:
+public slots:
     void on_btnPowerButton_clicked();
     void on_btnShockIndicator_clicked();
 
@@ -32,12 +32,18 @@ private slots:
 
     void on_btnApplyGoodCompression_clicked();
     void on_btnApplyBadCompression_clicked();
-
     void on_btnApplyBreathes_clicked();
 
     void on_btnAttachAdultPads_clicked();
-
     void on_btnAttachChildPads_clicked();
+
+signals:
+    void powerOn();
+    void attachChildPads();
+    void attachAdultPads();
+    void shock();
+    void applyCompressions();
+    void applyBreaths();
 
 private:
     Ui::MainWindow *ui;

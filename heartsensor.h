@@ -14,7 +14,7 @@ public:
     bool getWorking(); // check if this part is working
 
 public slots:
-    int getCondition(int i);
+    //int getCondition(int i);
 
 signals:
     void sendPEASignal(); // send PEA signal

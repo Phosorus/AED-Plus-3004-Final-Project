@@ -44,6 +44,7 @@ void MainWindow::on_btnPowerButton_clicked()
     */
 
     //Administer self test
+    powerOn();
     statusCheck(true);
     changeBatteryLevel(100);
 }
@@ -257,6 +258,7 @@ void MainWindow::on_btnApplyGoodCompression_clicked()
     s = "USER: " + s;
     ui->ActionLog->append(s);
     //Somehow determine compression quality and have AED give feedback
+    applyCompressions();
 }
 
 void MainWindow::on_btnApplyBadCompression_clicked()
@@ -274,6 +276,7 @@ void MainWindow::on_btnApplyBreathes_clicked()
     s = "*" + s +"*";
     s = "USER: " + s;
     ui->ActionLog->append(s);
+    applyBreaths();
 }
 
 
@@ -287,6 +290,8 @@ void MainWindow::on_btnAttachAdultPads_clicked()
     ui->ActionLog->append(s);
 
     //Maybe update the value of the AED class to reflect what pad is attached
+    //send attach symbols
+    attachAdultPads();
 }
 
 

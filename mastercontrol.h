@@ -34,7 +34,7 @@ public:
     CompressionSensor* cs;
     HeartSensor* hs;
 
-public slots:
+private slots:
     void startAED();
     void padsApplied();
     void goodCompressions();
