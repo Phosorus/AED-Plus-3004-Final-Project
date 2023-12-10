@@ -40,12 +40,15 @@ void MasterControl::delay(int n)
 
 void MasterControl::startAED(){
     w->changeBatteryLevel(battery->getCharge());
+    //If AED does not have sufficient charge
     if(diagnostics()==0){
         w->lowBattery();
     }
+    //Hardware issue detected
     else if (diagnostics()==1){
         w->statusCheck(false);
     }
+    //Good condition to begin
     else{
         //First half of the AED steps
          w->statusCheck(true);
@@ -92,7 +95,7 @@ void MasterControl::analysis(){
     //get current condition
     w->stepIndicator(4);
     delay(3);
-    int condition = 1;
+    int condition = 3;
     //switch statement
     switch(condition){
         case 1: //tachycardia
@@ -100,7 +103,6 @@ void MasterControl::analysis(){
             w->graphDisplay(4);
             currentlyShockable = true;
             currentlyUnstable =  true;
-            qDebug() << "tachycardia triggered";
             break;
         case 2: // fibri
             //display fibri graph
@@ -119,8 +121,6 @@ void MasterControl::analysis(){
             break;
      }
 
-    qDebug() << "analysis over";
-
     if(currentlyShockable){//user is shockable and therefore unstable.
         //display ask user to shock
         w->aedMessages(4);
@@ -135,7 +135,7 @@ void MasterControl::analysis(){
         w->stepIndicator(5);
     }
     else{//user is non-shockable and stable.
-        //display "user normal i guess"
+        w->aedMessages(8);
         //wait, then re do analysis
         delay(10);
         analysis();
@@ -169,6 +169,7 @@ void MasterControl::shock(){
     }
     else{
         //display ERROR: Condition is non-shockable, please re-analyse.
+        w->aedMessages(9);
     }
 }
 

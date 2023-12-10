@@ -35,13 +35,13 @@ void MainWindow::delay(int n)
 */
 void MainWindow::on_btnPowerButton_clicked()
 {
+    powerOn();
     /*
     Need to check power level
     Only after the power is on can you use the unit
     Second step is to check status of AED
     if power level not sufficient indicate audio msg
     */
-    powerOn();
 }
 
 void MainWindow::lowBattery(){
@@ -110,6 +110,7 @@ void MainWindow::aedMessages(int i){
         ui->ActionLog->append(s);
     }
     if(i == 6){
+        ui->btnShockIndicator->setEnabled(false);
         QString s = "STAND CLEAR! DO NOT touch patient!";
         s = "\"" + s +"\"";
         s = "AED: " + s;
@@ -145,9 +146,22 @@ void MainWindow::aedMessages(int i){
         s = "AED: " + s;
         ui->ActionLog->append(s);
 
+        ui->btnShockIndicator->setEnabled(true);
     }
     if(i == 7){
         QString s = "Shockers are not charged!";
+        s = "\"" + s +"\"";
+        s = "AED: " + s;
+        ui->ActionLog->append(s);
+    }
+    if(i==8){
+        QString s = "Patient appears to be stable!";
+        s = "\"" + s +"\"";
+        s = "AED: " + s;
+        ui->ActionLog->append(s);
+    }
+    if(i==9){
+        QString s = "ERROR: Condition is non-shockable, please re-analyse";
         s = "\"" + s +"\"";
         s = "AED: " + s;
         ui->ActionLog->append(s);
