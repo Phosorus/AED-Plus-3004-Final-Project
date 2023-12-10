@@ -26,3 +26,5 @@ bool Shockers::chargeUP(){
 bool Shockers::getWorking(){
     return working;
 }
+
+bool Shockers::getCharged(){return charged;}

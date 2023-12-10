@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>809</width>
-    <height>750</height>
+    <width>808</width>
+    <height>745</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -510,10 +510,109 @@ font-size: 18px</string>
      </property>
      <property name="geometry">
       <rect>
+       <x>320</x>
+       <y>200</y>
+       <width>41</width>
+       <height>15</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Nimbus Mono L</family>
+       <pointsize>-1</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font-weight: bold; font-size: 12px; background-color: rgb(0, 0, 0);border: 2px solid rgb(0,0,0);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="scaledContents">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblHeartSignal">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
        <x>70</x>
        <y>200</y>
-       <width>291</width>
+       <width>251</width>
        <height>15</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Nimbus Mono L</family>
+       <pointsize>-1</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font-weight: bold; font-size: 12px; background-color: rgb(0, 0, 0);border: 2px solid rgb(0,0,0);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="scaledContents">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblCompressionCount">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>320</y>
+       <width>161</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Nimbus Mono L</family>
+       <pointsize>-1</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font-weight: bold; font-size: 12px; background-color: rgb(0, 0, 0);border: 2px solid rgb(0,0,0);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="scaledContents">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="lblBreathCount">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>320</y>
+       <width>131</width>
+       <height>16</height>
       </rect>
      </property>
      <property name="font">
@@ -1075,7 +1174,7 @@ font-size: 46px</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>809</width>
+     <width>808</width>
      <height>22</height>
     </rect>
    </property>

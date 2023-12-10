@@ -24,7 +24,7 @@ public:
 
     void delay(int n);
 
-    bool diagnostics();
+    int diagnostics();
     void firstHalfSteps();
     void analysis();
     void compressions(bool alignment);

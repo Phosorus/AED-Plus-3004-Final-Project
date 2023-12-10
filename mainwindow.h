@@ -3,6 +3,11 @@
 
 #include <QMainWindow>
 #include <random>
+#include <QObject>
+#include <QThread>
+#include <QTime>
+#include <QCoreApplication>
+#include <QEventLoop>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,8 +20,15 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void delay(int n);
+    void lowBattery();
+    void aedMessages(int i);
     void stepIndicator(int step);
     void changeBatteryLevel(int i);
+    void compressionToggle(bool t);
+    void changeCompressionCount(int i);
+    void breathToggle(bool t);
+    void changeBreathCount(int i);
     void graphDisplay(int i);
     void statusCheck(bool);
     void shockReady();
@@ -42,7 +54,8 @@ signals:
     void attachChildPads();
     void attachAdultPads();
     void shock();
-    void applyCompressions();
+    void applyGoodCompressions();
+    void applyBadCompressions();
     void applyBreaths();
 
 private:

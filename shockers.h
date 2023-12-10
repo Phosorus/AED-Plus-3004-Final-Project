@@ -11,6 +11,7 @@ public:
     Shockers();
     bool shock(); // shock the patient
     bool chargeUP(); // charge the machine
+    bool getCharged();
     bool getWorking(); // check if this part is working
 };
 

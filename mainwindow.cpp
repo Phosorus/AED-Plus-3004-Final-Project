@@ -23,6 +23,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+//Wait for n seconds;
+void MainWindow::delay(int n)
+{
+    QTime dieTime= QTime::currentTime().addSecs(n);
+    while (QTime::currentTime() < dieTime)
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+}
 /*
  * Need to create a function that cycles through the AED Process (probably in the AED controller)
 */
@@ -32,23 +39,18 @@ void MainWindow::on_btnPowerButton_clicked()
     Need to check power level
     Only after the power is on can you use the unit
     Second step is to check status of AED
+    if power level not sufficient indicate audio msg
     */
-
-    /*if power level not sufficient indicate audio msg
-
-    QString s = "Change batteries";
-    s = "\"" + s +"\"";
-    s = "AED: " + s;
-    ui->ActionLog->append(s);
-
-    */
-
-    //Administer self test
     powerOn();
-    statusCheck(true);
-    changeBatteryLevel(100);
 }
 
+void MainWindow::lowBattery(){
+    ui->lblLED_Display->setStyleSheet("font-weight: bold; font-size: 30px; background-color: rgb(0, 0, 0);border: 2px solid rgb(0,0,0);");
+    ui->lblGoodStatus->setStyleSheet("font-weight: bold; font-size: 50px;");
+    ui->lblBadStatus->setStyleSheet("font-weight: bold; font-size: 46px; color: rgb(255, 0, 0);");
+    ui->lblLED_Display->setAlignment(Qt::AlignCenter);
+    ui->lblLED_Display->setText("CHANGE BATTERY");
+}
 void MainWindow::statusCheck(bool operational){
     if(operational){
         ui->lblGoodStatus->setStyleSheet("font-weight: bold; font-size: 50px; color: rgb(45, 255, 0);");
@@ -73,20 +75,84 @@ void MainWindow::statusCheck(bool operational){
 }
 void MainWindow::on_btnShockIndicator_clicked()
 {
-    //Using this as a testing function for now
-    counter++;
-    stepIndicator(counter);
-    if(counter == 5){
-        counter = 0;
-    }
-    /*
-    QString s = "Automatic Defibrilator Unit Error!";
-    s = "\"" + s +"\"";
-    s = "AED: " + s;
-    ui->ActionLog->append(s);
-    */
+    shock();
 }
 
+void MainWindow::aedMessages(int i){
+    if(i == 1){
+        QString s = "Poor compression detected, please adjust!";
+        s = "\"" + s +"\"";
+        s = "AED: " + s;
+        ui->ActionLog->append(s);
+    }
+    if(i == 2){
+        QString s = "Compression set complete! Please apply 2 breaths!";
+        s = "\"" + s +"\"";
+        s = "AED: " + s;
+        ui->ActionLog->append(s);
+    }
+    if(i == 3){
+        QString s = "Not enough compressions detected. Please apply compressions first!";
+        s = "\"" + s +"\"";
+        s = "AED: " + s;
+        ui->ActionLog->append(s);
+    }
+    if(i == 4){
+        QString s = "Shock is advised! Please iniate shock!";
+        s = "\"" + s +"\"";
+        s = "AED: " + s;
+        ui->ActionLog->append(s);
+    }
+    if(i == 5){
+        QString s = "Non-shockable treatment! Please iniate CPR!";
+        s = "\"" + s +"\"";
+        s = "AED: " + s;
+        ui->ActionLog->append(s);
+    }
+    if(i == 6){
+        QString s = "STAND CLEAR! DO NOT touch patient!";
+        s = "\"" + s +"\"";
+        s = "AED: " + s;
+        ui->ActionLog->append(s);
+        delay(1);
+
+        s = "Shock will be delivered in";
+        s = "\"" + s +"\"";
+        s = "AED: " + s;
+        ui->ActionLog->append(s);
+
+        delay(1);
+        s = "3";
+        s = "\"" + s +"\"";
+        s = "AED: " + s;
+        ui->ActionLog->append(s);
+
+        delay(1);
+        s = "2";
+        s = "\"" + s +"\"";
+        s = "AED: " + s;
+        ui->ActionLog->append(s);
+
+        delay(1);
+        s = "1";
+        s = "\"" + s +"\"";
+        s = "AED: " + s;
+        ui->ActionLog->append(s);
+
+        delay(1);
+        s = "Shock has been delivered!";
+        s = "\"" + s +"\"";
+        s = "AED: " + s;
+        ui->ActionLog->append(s);
+
+    }
+    if(i == 7){
+        QString s = "Shockers are not charged!";
+        s = "\"" + s +"\"";
+        s = "AED: " + s;
+        ui->ActionLog->append(s);
+    }
+}
 void MainWindow::shockReady(){
     ui->btnShockIndicator->setStyleSheet("color: rgb(255, 0, 0); font-size: 45px; font-weight: bold; background-color: rgb(133, 172, 190); border: 4px solid rgb(45, 255, 0); border-radius: 25px;");
     QString s = "Shock Ready!";
@@ -102,18 +168,22 @@ void MainWindow::graphDisplay(int i){
     else if(i==1){
         QPixmap image(":/assets/Sinus.png");
         ui->lblLED_Display->setPixmap(image);
+        ui->lblHeartSignal->setText("Sinus Rhythm");
     }
     else if(i==2){
         QPixmap image(":/assets/Asystole.png");
         ui->lblLED_Display->setPixmap(image);
+        ui->lblHeartSignal->setText("Asystole");
     }
     else if(i==3){
         QPixmap image(":/assets/fibrillation.png");
         ui->lblLED_Display->setPixmap(image);
+        ui->lblHeartSignal->setText("Ventricular Fibrillation");
     }
     else if(i==4){
         QPixmap image(":/assets/tachycardia.png");
         ui->lblLED_Display->setPixmap(image);
+        ui->lblHeartSignal->setText("Ventricular Tachycardia");
     }
 }
 
@@ -123,6 +193,34 @@ void MainWindow::changeBatteryLevel(int i){
     ui->lblBatteryDisplay->setText(s);
 }
 
+void MainWindow::changeCompressionCount(int i){
+    QString s = "Compressions: ";
+    s = s +  QString::number(i);
+    ui->lblCompressionCount->setText(s);
+}
+void MainWindow::changeBreathCount(int i){
+    QString s = "Breaths: ";
+    s = s +  QString::number(i);
+    ui->lblBreathCount->setText(s);
+}
+
+void MainWindow::compressionToggle(bool t){
+    if(t==true){
+        ui->btnApplyGoodCompression->setStyleSheet("font-size: 13px;color: rgb(0, 0, 0);font-weight: bold;border: 4px solid  rgb(45, 255, 0);border-radius: 6px;background-color: rgb(255, 255, 255);");
+        ui->btnApplyBadCompression->setStyleSheet("font-size: 13px;color: rgb(0, 0, 0);font-weight: bold;border: 4px solid  rgb(45, 255, 0);border-radius: 6px;background-color: rgb(255, 255, 255);");
+    }else{
+        ui->btnApplyGoodCompression->setStyleSheet("font-size: 13px;color: rgb(0, 0, 0);font-weight: bold;border: 4px solid  rgb(175, 193, 204);border-radius: 6px;background-color: rgb(255, 255, 255);");
+        ui->btnApplyBadCompression->setStyleSheet("font-size: 13px;color: rgb(0, 0, 0);font-weight: bold;border: 4px solid  rgb(175, 193, 204);border-radius: 6px;background-color: rgb(255, 255, 255);");
+    }
+}
+
+void MainWindow::breathToggle(bool t){
+    if(t==true){
+        ui->btnApplyBreathes->setStyleSheet("font-size: 13px;color: rgb(0, 0, 0);font-weight: bold;border: 4px solid  rgb(45, 255, 0);border-radius: 6px;background-color: rgb(255, 255, 255);");
+    }else{
+        ui->btnApplyBreathes->setStyleSheet("font-size: 13px;color: rgb(0, 0, 0);font-weight: bold;border: 4px solid  rgb(175, 193, 204);border-radius: 6px;background-color: rgb(255, 255, 255);");
+    }
+}
 void MainWindow::stepIndicator(int i){
     if(i==1){
         ui->grpUserActions->show();
@@ -205,7 +303,6 @@ void MainWindow::stepIndicator(int i){
         s = "\"" + s +"\"";
         s = "AED: " + s;
         ui->ActionLog->append(s);
-        graphDisplay(1);
     }
     else if(i==5){
         ui->grpPadOptions->hide();
@@ -258,7 +355,7 @@ void MainWindow::on_btnApplyGoodCompression_clicked()
     s = "USER: " + s;
     ui->ActionLog->append(s);
     //Somehow determine compression quality and have AED give feedback
-    applyCompressions();
+    applyGoodCompressions();
 }
 
 void MainWindow::on_btnApplyBadCompression_clicked()
@@ -267,12 +364,11 @@ void MainWindow::on_btnApplyBadCompression_clicked()
     s = "*" + s +"*";
     s = "USER: " + s;
     ui->ActionLog->append(s);
-    //Somehow determine compression quality and have AED give feedback
+    applyBadCompressions();
 }
-
 void MainWindow::on_btnApplyBreathes_clicked()
 {
-    QString s = "Applies 2 breathes";
+    QString s = "Applies breath";
     s = "*" + s +"*";
     s = "USER: " + s;
     ui->ActionLog->append(s);
