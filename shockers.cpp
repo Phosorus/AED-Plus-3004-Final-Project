@@ -26,6 +26,8 @@ void Shockers::setPower(double power){
     this->power = power;
 }
 
+double Shockers::getPower(){return power;}
+
 // check if this part is working
 bool Shockers::getWorking(){
     return working;

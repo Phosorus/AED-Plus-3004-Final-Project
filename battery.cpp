@@ -13,7 +13,9 @@ int Battery::deplete(int n){
     }
     return this->charge;
 }
-
+void Battery::change(){
+    charge = 100;
+}
 int Battery::getCharge(){
     return this->charge;
 }

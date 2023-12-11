@@ -81,9 +81,9 @@ void MainWindow::powerOff(){
     ui->grpPadOptions->hide();
     ui->grpTreatmentOptions->hide();
 }
-void MainWindow::lowBattery(){
+void MainWindow::lowBattery(int c){
     QString s = "▯";
-    s = s +  QString::number(0) +"%";
+    s = s +  QString::number(c) +"%";
     ui->lblBatteryDisplay->setText(s);
     ui->lblLED_Display->setStyleSheet("font-weight: bold; font-size: 30px; background-color: rgb(0, 0, 0);border: 2px solid rgb(0,0,0);");
     ui->lblGoodStatus->setStyleSheet("font-weight: bold; font-size: 50px;");
@@ -460,5 +460,11 @@ void MainWindow::on_btnAttachChildPads_clicked()
     ui->ActionLog->append(s);
 
     attachChildPads();
+}
+
+
+void MainWindow::on_btnChangeBattery_clicked()
+{
+    changeBattery();
 }
 

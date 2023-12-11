@@ -1,7 +1,7 @@
 #include "mastercontrol.h"
 
 #define CHILD 8
-
+#define MIN_OPERATION 10
 MasterControl::MasterControl()
 {
      battery = new Battery(100);
@@ -34,6 +34,8 @@ MasterControl::MasterControl()
      connect(w, SIGNAL(applyBreaths()), cs, SLOT(breathsSlot()));
      connect(w, SIGNAL(shock()), this, SLOT(shock()));
 
+     connect(w, SIGNAL(changeBattery()), this, SLOT(changeBattery()));
+
 }
 
 //Wait for n seconds;
@@ -51,7 +53,7 @@ void MasterControl::startAED(){
         w->changeBatteryLevel(battery->getCharge());
         //If AED does not have sufficient charge
         if(diagnostics()==0){
-            w->lowBattery();
+            w->lowBattery(battery->getCharge());
         }
         //Hardware issue detected
         else if (diagnostics()==1){
@@ -77,7 +79,7 @@ void MasterControl::startAED(){
 //Checks the battery plus each element of the AED.
 int MasterControl::diagnostics(){
     //check battery for sufficient battery power
-    if(battery->getCharge() < 60){
+    if(battery->getCharge() < shocker->getPower()+MIN_OPERATION){
         return 0;
     }
     //check each component for working
@@ -111,66 +113,70 @@ void MasterControl::padsAppliedChild(){
 
 //analysis
 void MasterControl::analysis(){
-    //reset breaths & compressions
-    numCompressions = 0;
-    numBreaths = 0;
-
-    w->changeCompressionCount(numCompressions);
-    w->changeBreathCount(numBreaths);
-    w->changeShockCount(numShocks);
-    //analysis phase
-    //get current condition
-
-    int condition = hs->getPatientCondition();
-
-    w->stepIndicator(4);
-    delay(3);
-
-    //switch statement
-    switch(condition){
-        case 1: //tachycardia
-            //display tachycardia graph
-            w->graphDisplay(4);
-            currentlyShockable = true;
-            currentlyUnstable =  true;
-            break;
-        case 2: // fibri
-            //display fibri graph
-            w->graphDisplay(3);
-            currentlyShockable = true;
-            currentlyUnstable =  true;
-            break;
-        case 3: //normal
-            //display normal graph
-            w->graphDisplay(1);
-            currentlyUnstable =  false;
-            break;
-        case 4: //asystole
-            w->graphDisplay(2);
-            currentlyUnstable =  true;
-            break;
-     }
-
-    if(currentlyShockable){//user is shockable and therefore unstable.
-        //display ask user to shock
-        w->aedMessages(4);
-        //Primes shock pads and waits for user to initiate shock
-        shocker->chargeUP();
-        w->shockReady();
+    if(diagnostics()==0){
+        w->lowBattery(battery->getCharge());
     }
-    else if(currentlyUnstable){//user is unstable but non shockable
-        //display "user non shockable, proceed to CPR"
-        w->aedMessages(5);
-        //move directly to CPR
-        w->stepIndicator(5);
-    }
-    else{//user is non-shockable and stable.
-        w->aedMessages(8);
-        //wait, then re do analysis
-        delay(10);
-        analysis();
-    }
+    else{
+        //reset breaths & compressions
+        numCompressions = 0;
+        numBreaths = 0;
 
+        w->changeCompressionCount(numCompressions);
+        w->changeBreathCount(numBreaths);
+        w->changeShockCount(numShocks);
+        //analysis phase
+        //get current condition
+
+        int condition = hs->getPatientCondition();
+
+        w->stepIndicator(4);
+        delay(3);
+
+        //switch statement
+        switch(condition){
+            case 1: //tachycardia
+                //display tachycardia graph
+                w->graphDisplay(4);
+                currentlyShockable = true;
+                currentlyUnstable =  true;
+                break;
+            case 2: // fibri
+                //display fibri graph
+                w->graphDisplay(3);
+                currentlyShockable = true;
+                currentlyUnstable =  true;
+                break;
+            case 3: //normal
+                //display normal graph
+                w->graphDisplay(1);
+                currentlyUnstable =  false;
+                break;
+            case 4: //asystole
+                w->graphDisplay(2);
+                currentlyUnstable =  true;
+                break;
+         }
+
+        if(currentlyShockable){//user is shockable and therefore unstable.
+            //display ask user to shock
+            w->aedMessages(4);
+            //Primes shock pads and waits for user to initiate shock
+            shocker->chargeUP();
+            w->shockReady();
+        }
+        else if(currentlyUnstable){//user is unstable but non shockable
+            //display "user non shockable, proceed to CPR"
+            w->aedMessages(5);
+            //move directly to CPR
+            w->stepIndicator(5);
+        }
+        else{//user is non-shockable and stable.
+            w->aedMessages(8);
+            //wait, then re do analysis
+            delay(10);
+            analysis();
+        }
+    }
 }
 
 void MasterControl::shock(){
@@ -258,6 +264,14 @@ void MasterControl::breaths(){
 
 }
 
+void MasterControl::changeBattery(){
+    battery->change();
+    numBreaths = 0;
+    numCompressions = 0;
+    numShocks = 0;
+    hasPower = false;
+    w->powerOff();
+}
 MasterControl::~MasterControl()
 {
     delete battery;

@@ -21,7 +21,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void delay(int n);
-    void lowBattery();
+    void lowBattery(int c);
     void powerOff();
     void aedMessages(int i);
     void stepIndicator(int step);
@@ -59,6 +59,10 @@ signals:
     void applyGoodCompressions();
     void applyBadCompressions();
     void applyBreaths();
+    void changeBattery();
+
+private slots:
+    void on_btnChangeBattery_clicked();
 
 private:
     Ui::MainWindow *ui;

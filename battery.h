@@ -6,6 +6,7 @@ class Battery
 {
 public:
     Battery(int n);
+    void change();
     int deplete(int n);
     int getCharge();
 

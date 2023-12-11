@@ -44,6 +44,7 @@ private slots:
     void badCompressions();
     void breaths();
     void shock();
+    void changeBattery();
 
 private:
     bool currentlyShockable = false;
