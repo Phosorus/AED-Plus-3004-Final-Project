@@ -1,3 +1,11 @@
+/*
+This class serves as the AED's shocker pads
+
+Private Members:
+
+chargeUp - charges up the bad based on signal from master control
+setPower - different power levels for adult and child pads
+*/
 #include "shockers.h"
 #include <QDebug>
 
