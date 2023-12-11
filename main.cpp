@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "signalanalyser.h"
 #include <QtDebug>
 #include <QApplication>
 #include "mastercontrol.h"
