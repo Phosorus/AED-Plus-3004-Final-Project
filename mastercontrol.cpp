@@ -1,12 +1,17 @@
 #include "mastercontrol.h"
 
+#define CHILD 8
+
 MasterControl::MasterControl()
 {
      battery = new Battery(100);
      shocker = new Shockers();
      w = new MainWindow;
 
-     hs = new HeartSensor();
+     //remove patient after testing;
+     patient = new Patient(1, false);
+
+     hs = new HeartSensor(patient);
      cs = new CompressionSensor();
 
      w->show();
@@ -15,6 +20,8 @@ MasterControl::MasterControl()
      connect(w, SIGNAL(powerOn()), this, SLOT(startAED()));
 
      connect(w, SIGNAL(attachAdultPads()), this, SLOT(padsApplied()));
+     connect(w, SIGNAL(attachChildPads()), this, SLOT(padsAppliedChild()));
+
      //remember to add child pads attachment
      //connect(w, SIGNAL(), this, SLOT(padsApplied()));
 
@@ -83,6 +90,14 @@ void MasterControl::padsApplied(){
     analysis();
 }
 
+void MasterControl::padsAppliedChild(){
+    //change the power to child safe levels
+    bool isChild = true;
+    qDebug() << "triggered";
+    shocker->setPower(CHILD);
+    analysis();
+}
+
 //analysis
 void MasterControl::analysis(){
     //reset breaths & compressions
@@ -91,11 +106,15 @@ void MasterControl::analysis(){
 
     w->changeCompressionCount(numCompressions);
     w->changeBreathCount(numBreaths);
+    w->changeShockCount(numShocks);
     //analysis phase
     //get current condition
+
+    int condition = hs->getPatientCondition();
+
     w->stepIndicator(4);
     delay(3);
-    int condition = 3;
+
     //switch statement
     switch(condition){
         case 1: //tachycardia
@@ -152,11 +171,12 @@ void MasterControl::shock(){
             w->aedMessages(6);
 
             //Performs shock
-            battery->deplete(15); //fix to have modular shocks (child/adult)
-            shocker->shock();
+            battery->deplete(shocker->shock());
+            numShocks++;
 
             //Update the battery level on AED screen
             w->changeBatteryLevel(battery->getCharge());
+            w->changeShockCount(numShocks);
 
             //move on to CPR
             w->stepIndicator(5);

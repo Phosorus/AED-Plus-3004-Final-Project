@@ -1,7 +1,20 @@
 #include "patient.h"
 
-patient::patient(QObject *parent)
-    : QObject{parent}
+Patient::Patient(int condition, bool child)
 {
+    this->condition = condition;
+    this->child = child;
+}
 
+int Patient::getHeartCondition(){
+    return this->condition;
+}
+
+int Patient::setHeartCondition(int condition){
+    this->condition = condition;
+    return this->condition;
+}
+
+bool Patient::isChild(){
+    return this->child;
 }

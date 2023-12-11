@@ -1,20 +1,23 @@
 #ifndef PATIENT_H
 #define PATIENT_H
 
-#include <QObject>
+#define TACHY = 1;
+#define FIBRI = 2;
+#define NORMAL = 3;
+#define ASYST = 4;
 
-class patient : public QObject
+class Patient
 {
-    Q_OBJECT
 public:
-    patient(int currentCondition);
+    Patient(int condition, bool child);
+
+    int getHeartCondition();
+    int setHeartCondition(int condition);
+    bool isChild();
 
 private:
-    int currentCondition = 1;
-
-signals:
-    void conditionSignal(int condition);
-
+    int condition;
+    bool child;
 };
 
 #endif // PATIENT_H

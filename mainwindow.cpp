@@ -419,6 +419,7 @@ void MainWindow::on_btnAttachChildPads_clicked()
     s = "USER: " + s;
     ui->ActionLog->append(s);
 
+    attachChildPads();
+
     //Maybe update the value of the AED class to reflect what pad is attached
 }
-

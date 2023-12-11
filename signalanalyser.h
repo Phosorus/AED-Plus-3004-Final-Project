@@ -3,7 +3,6 @@
 
 #define TACHYCARDIA 0
 #define FIBRILLATION 1
-#define NORMAL 2
 #define NONTREATABLE 3
 #define ANOMALOUS 4
 #define MINIMUM_MATCH 70

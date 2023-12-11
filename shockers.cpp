@@ -7,19 +7,23 @@ Shockers::Shockers()
 }
 
 // shock the patient
-bool Shockers::shock(){
+double Shockers::shock(){
     if (charged){
         qInfo() << "SHOCKING";
         charged = false;
-        return true;
+        return this->power;
     }
-    return false;
+    return this->power;
 }
 
 // charge the machine
 bool Shockers::chargeUP(){
     charged = true;
     return charged;
+}
+
+void Shockers::setPower(double power){
+    this->power = power;
 }
 
 // check if this part is working

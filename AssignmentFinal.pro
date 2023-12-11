@@ -13,7 +13,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mastercontrol.cpp \
-    signalanalyser.cpp \
+    patient.cpp \
     compressionsensor.cpp \
     heartsensor.cpp \
     sensorpads.cpp \
@@ -25,7 +25,7 @@ HEADERS += \
     battery.h \
     mainwindow.h \
     mastercontrol.h \
-    signalanalyser.h \
+    patient.h \
     compressionsensor.h \
     heartsensor.h \
     sensorpads.h \

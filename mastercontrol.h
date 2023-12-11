@@ -6,6 +6,7 @@
 #include "shockers.h"
 #include "compressionsensor.h"
 #include "heartsensor.h"
+#include "patient.h"
 
 #include <QtDebug>
 #include <QObject>
@@ -33,10 +34,12 @@ public:
     MainWindow* w;
     CompressionSensor* cs;
     HeartSensor* hs;
+    Patient* patient;
 
 private slots:
     void startAED();
     void padsApplied();
+    void padsAppliedChild();
     void goodCompressions();
     void badCompressions();
     void breaths();
@@ -47,6 +50,9 @@ private:
     bool currentlyUnstable = true;
     int numCompressions = 0;
     int numBreaths = 0;
+    int numShocks = 0;
+
+    bool isChild = false;
 
     Shockers* shocker;
     Battery* battery;
