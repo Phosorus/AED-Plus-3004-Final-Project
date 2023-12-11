@@ -5,6 +5,7 @@
 #include <random>
 #include <QObject>
 #include <QThread>
+#include <QTimer>
 #include <QTime>
 #include <QCoreApplication>
 #include <QEventLoop>
@@ -34,6 +35,7 @@ public:
     void statusCheck(bool);
     void shockReady();
     void changeShockCount(int i);
+    void resetUI();
 
 public slots:
     void on_btnPowerButton_clicked();
@@ -43,11 +45,11 @@ public slots:
     void on_btnCheckPatient_clicked();
     void on_btnCallHelp_clicked();
 
-
-    void on_btnApplyGoodCompression_clicked();
+    void updateTimer();
+    void stopTimer();
     void on_btnApplyBadCompression_clicked();
     void on_btnApplyBreathes_clicked();
-
+    void goodCompressionPressed();
     void on_btnAttachAdultPads_clicked();
     void on_btnAttachChildPads_clicked();
 
@@ -67,5 +69,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     int counter;
+    QTimer *timer;
+    QTime startTime;
 };
 #endif // MAINWINDOW_H

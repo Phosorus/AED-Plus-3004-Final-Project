@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+
     ui->setupUi(this);
     ui->grpUserActions->hide();
     ui->grpPadOptions->hide();
@@ -16,6 +17,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lblStep5->setEnabled(false);
     ui->lblStep6->setEnabled(false);
     counter = 0;
+
+    connect(ui->btnApplyGoodCompression, SIGNAL(clicked()), this, SLOT(goodCompressionPressed()));
+
+    // Initialize timer
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(updateTimer()));
 }
 
 MainWindow::~MainWindow()
@@ -55,6 +62,23 @@ void MainWindow::powerOff(){
     s = "AED: " + s;
     ui->ActionLog->append(s);
 
+    resetUI();
+}
+void MainWindow::lowBattery(int c){
+    QString s = "▯";
+    s = s +  QString::number(c) +"%";
+    ui->lblBatteryDisplay->setText(s);
+
+    resetUI();
+
+    ui->lblLED_Display->setStyleSheet("font-weight: bold; font-size: 30px; background-color: rgb(0, 0, 0);border: 2px solid rgb(0,0,0);");
+    ui->lblGoodStatus->setStyleSheet("font-weight: bold; font-size: 50px;");
+    ui->lblBadStatus->setStyleSheet("font-weight: bold; font-size: 46px; color: rgb(255, 0, 0);");
+    ui->lblLED_Display->setAlignment(Qt::AlignCenter);
+    ui->lblLED_Display->setText("CHANGE BATTERY");
+}
+
+void MainWindow::resetUI(){
     ui->lblStep1->setEnabled(false);
     ui->lblStep2->setEnabled(false);
     ui->lblStep3->setEnabled(false);
@@ -67,6 +91,9 @@ void MainWindow::powerOff(){
     ui->lblStep4->setStyleSheet("border: 4px solid  rgb(175, 193, 204); border-radius: 6px;");
     ui->lblStep5->setStyleSheet("border: 4px solid  rgb(175, 193, 204); border-radius: 6px;");
     ui->lblStep6->setStyleSheet("border: 4px solid  rgb(175, 193, 204); border-radius: 6px;");
+    ui->lblAdult->setStyleSheet("font-weight: bold; font-size: 18px; color: rgb(255, 255, 255);");
+    ui->lblAdult->setStyleSheet("font-weight: bold; font-size: 18px; color: rgb(255, 255, 255);");
+
     ui->lblGoodStatus->setStyleSheet("font-weight: bold; font-size: 50px;");
     ui->lblBadStatus->setStyleSheet("font-weight: bold; font-size: 46px;");
     ui->lblBatteryDisplay->clear();
@@ -80,16 +107,6 @@ void MainWindow::powerOff(){
     ui->btnShockIndicator->setStyleSheet("color: rgb(255, 0, 0); font-size: 45px; font-weight: bold; background-color: rgb(133, 172, 190); border: 4px solid rgb(175, 193, 204); border-radius: 25px;");
     ui->grpPadOptions->hide();
     ui->grpTreatmentOptions->hide();
-}
-void MainWindow::lowBattery(int c){
-    QString s = "▯";
-    s = s +  QString::number(c) +"%";
-    ui->lblBatteryDisplay->setText(s);
-    ui->lblLED_Display->setStyleSheet("font-weight: bold; font-size: 30px; background-color: rgb(0, 0, 0);border: 2px solid rgb(0,0,0);");
-    ui->lblGoodStatus->setStyleSheet("font-weight: bold; font-size: 50px;");
-    ui->lblBadStatus->setStyleSheet("font-weight: bold; font-size: 46px; color: rgb(255, 0, 0);");
-    ui->lblLED_Display->setAlignment(Qt::AlignCenter);
-    ui->lblLED_Display->setText("CHANGE BATTERY");
 }
 void MainWindow::statusCheck(bool operational){
     if(operational){
@@ -202,6 +219,18 @@ void MainWindow::aedMessages(int i){
     }
     if(i==9){
         QString s = "ERROR: Condition is non-shockable, please re-analyse";
+        s = "\"" + s +"\"";
+        s = "AED: " + s;
+        ui->ActionLog->append(s);
+    }
+    if(i==10){
+        QString s = "Poor compression detected, too fast!";
+        s = "\"" + s +"\"";
+        s = "AED: " + s;
+        ui->ActionLog->append(s);
+    }
+    if(i==11){
+        QString s = "Poor compression detected, too slow!";
         s = "\"" + s +"\"";
         s = "AED: " + s;
         ui->ActionLog->append(s);
@@ -406,23 +435,37 @@ void MainWindow::on_btnCallHelp_clicked()
     ui->btnCallHelp->setEnabled(false);
 }
 
-
-void MainWindow::on_btnApplyGoodCompression_clicked()
-{
+void MainWindow::goodCompressionPressed() {
     QString s = "Applies good chest compression";
     s = "*" + s +"*";
     s = "USER: " + s;
     ui->ActionLog->append(s);
     //Somehow determine compression quality and have AED give feedback
+
+    timer->start(1);
+    startTime = QTime::currentTime();
+
     applyGoodCompressions();
 }
+void MainWindow::updateTimer() {
+    QTime currentTime = QTime::currentTime();
+    int elapsed = startTime.msecsTo(currentTime); // Calculate elapsed seconds
+    QString s = "Good Compression (" + QString::number(elapsed) + " ms)";
 
+    ui->btnApplyGoodCompression->setText(QString(s));
+}
+
+void MainWindow::stopTimer(){
+    timer->stop();
+    ui->btnApplyGoodCompression->setText("Good Compression");
+}
 void MainWindow::on_btnApplyBadCompression_clicked()
 {
     QString s = "Applies bad chest compression";
     s = "*" + s +"*";
     s = "USER: " + s;
     ui->ActionLog->append(s);
+
     applyBadCompressions();
 }
 void MainWindow::on_btnApplyBreathes_clicked()

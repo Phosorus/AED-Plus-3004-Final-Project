@@ -14,6 +14,7 @@
 #include <QTime>
 #include <QCoreApplication>
 #include <QEventLoop>
+#include <QDateTime>
 
 class MasterControl : public QObject
 {
@@ -47,11 +48,14 @@ private slots:
     void changeBattery();
 
 private:
+    QDateTime prevCompressionTime;
+    QDateTime curCompressionTime;
     bool currentlyShockable = false;
     bool currentlyUnstable = true;
     int numCompressions = 0;
     int numBreaths = 0;
     int numShocks = 0;
+    int cprRounds = 0;
 
     bool isChild = false;
     bool hasPower = false;

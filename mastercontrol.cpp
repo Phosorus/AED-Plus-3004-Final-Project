@@ -2,6 +2,12 @@
 
 #define CHILD 8
 #define MIN_OPERATION 10
+#define SUFFICIENT_CPR_ROUNDS 3
+#define SUFFICIENT_COMPRESSIONS 5
+#define SUFFICIENT_BREATHS 2
+
+#define LOWER_COMPRESSION_RANGE 1000
+#define UPPER_COMPRESSION_RANGE 2000
 MasterControl::MasterControl()
 {
      battery = new Battery(100);
@@ -9,7 +15,7 @@ MasterControl::MasterControl()
      w = new MainWindow;
 
      //remove patient after testing;
-     patient = new Patient(1, true);
+     patient = new Patient(4, true);
 
      hs = new HeartSensor(patient);
      cs = new CompressionSensor();
@@ -70,6 +76,7 @@ void MasterControl::startAED(){
         numBreaths = 0;
         numCompressions = 0;
         numShocks = 0;
+        cprRounds = 0;
         hasPower = false;
         w->powerOff();
 
@@ -105,8 +112,6 @@ void MasterControl::padsApplied(){
 
 void MasterControl::padsAppliedChild(){
     //change the power to child safe levels
-    bool isChild = true;
-    qDebug() << "triggered";
     shocker->setPower(CHILD);
     analysis();
 }
@@ -169,6 +174,8 @@ void MasterControl::analysis(){
             w->aedMessages(5);
             //move directly to CPR
             w->stepIndicator(5);
+            w->compressionToggle(true);
+            w->breathToggle(false);
         }
         else{//user is non-shockable and stable.
             w->aedMessages(8);
@@ -219,42 +226,81 @@ void MasterControl::badCompressions(){
 }
 
 void MasterControl::compressions(bool alignment){
-    if(alignment && numCompressions+1 >= 30){
-        //User UI indicator changes
-        w->compressionToggle(false);
-        w->breathToggle(true);
-
-        //Updates the compression count but also sends AED audio queue to move onto breaths as adequet compression count has been reached
-        numCompressions++;
-        w->changeCompressionCount(numCompressions);
-        w->aedMessages(2);
-    }
-    else{
-        if(alignment){
+    if(alignment){
+        if(numCompressions==0){
+            prevCompressionTime = QDateTime::currentDateTime();
             numCompressions++;
             w->changeCompressionCount(numCompressions);
         }
         else{
-            //Audio warning for a bad compression being detected
-            w->aedMessages(1);
+            curCompressionTime = QDateTime::currentDateTime();
+            //Too fast
+            if(prevCompressionTime.msecsTo(curCompressionTime)<=LOWER_COMPRESSION_RANGE){
+                w->aedMessages(10);
+            }
+            //Too slow
+            else if (prevCompressionTime.msecsTo(curCompressionTime) >= UPPER_COMPRESSION_RANGE){
+                w->aedMessages(11);
+            }
+            //Good Timing
+            else{
+                if(numCompressions+1>=SUFFICIENT_COMPRESSIONS){
+                    //User UI indicator changes
+                    w->stopTimer();
+                    w->compressionToggle(false);
+                    w->breathToggle(true);
+
+                    //Updates the compression count but also sends AED audio queue to move onto breaths as adequet compression count has been reached
+                    numCompressions++;
+                    w->changeCompressionCount(numCompressions);
+                    w->aedMessages(2);
+                }
+                else{
+                    numCompressions++;
+                    w->changeCompressionCount(numCompressions);
+                }
+            }
+            prevCompressionTime = curCompressionTime;
         }
+
     }
+    else{
+        //Audio warning for a bad compression being detected
+        w->aedMessages(1);
+    }
+
+
 }
 
 void MasterControl::breaths(){
-    if(numCompressions<30){
+    if(numCompressions<SUFFICIENT_COMPRESSIONS){
         //Send AED message to state not enough compressions have been preformed
         w->aedMessages(3);
     }
     else{
-        if(numBreaths+1 == 2){
+        if(numBreaths+1 == SUFFICIENT_BREATHS){
             //User UI indicator changes
             w->breathToggle(false);
 
             numBreaths++;
             w->changeBreathCount(numBreaths);
-            //display return to analysis
-            analysis();
+            //if sufficient rounds of CPR has been reached, display return to analysis
+            if(cprRounds+1==SUFFICIENT_CPR_ROUNDS){
+                cprRounds=0;
+                analysis();
+            }else{
+                cprRounds++;
+
+                numCompressions=0;
+                w->changeCompressionCount(numCompressions);
+                numBreaths=0;
+                w->changeBreathCount(numBreaths);
+
+                w->stepIndicator(5);
+                w->compressionToggle(true);
+                w->breathToggle(false);
+
+            }
         }
         else{
             numBreaths++;
@@ -269,6 +315,7 @@ void MasterControl::changeBattery(){
     numBreaths = 0;
     numCompressions = 0;
     numShocks = 0;
+    cprRounds = 0;
     hasPower = false;
     w->powerOff();
 }
