@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lblStep5->setEnabled(false);
     ui->lblStep6->setEnabled(false);
     counter = 0;
-    isWorking = true;
+    working = true;
     connect(ui->btnApplyGoodCompression, SIGNAL(clicked()), this, SLOT(goodCompressionPressed()));
 
     // Initialize timer
@@ -525,4 +525,6 @@ void MainWindow::on_btnAttachChildPads_clicked()
 
 //User's action button to change the battery
 void MainWindow::on_btnChangeBattery_clicked(){changeBattery();}
+
+
 

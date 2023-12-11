@@ -8,12 +8,12 @@
 
 #define LOWER_COMPRESSION_RANGE 1000
 #define UPPER_COMPRESSION_RANGE 2000
-MasterControl::MasterControl()
+MasterControl::MasterControl(Patient* patient)
 {
      battery = new Battery(100);
      shocker = new Shockers();
      w = new MainWindow;
-
+     patient = patient;
      hs = new HeartSensor(patient);
      cs = new CompressionSensor();
 
@@ -314,6 +314,65 @@ void MasterControl::changeBattery(){
     cprRounds = 0;
     hasPower = false;
     w->powerOff();
+}
+
+void MasterControl::testAED(int i){
+    switch(i){
+        case 0: //Battery Failure
+
+            //setup battery low power
+                battery->deplete(90);
+
+            delay(10);
+            w->powerOn();
+            delay(5);
+
+            //w->powerOff();
+
+        break;
+        case 1: //Component Failure
+
+            //setup faulty components
+                //
+
+            w->powerOn();
+            delay(5);
+
+        break;
+        case 2: //Correct Procedure (Adult, Tachycardia)
+            delay(5);
+
+            w->on_btnPowerButton_clicked();
+            delay(5);
+
+            w->on_btnAttachAdultPads_clicked();
+            delay(5);
+
+            w->on_btnShockIndicator_clicked();
+
+            delay(7);
+
+            for(int i = 0; i < 30; i++){
+                w->goodCompressionPressed();
+                qDebug() << "Triggered";
+                delay(1);
+            }
+
+            delay(2);
+
+            for(int i = 0; i < 2; i++){
+                w->on_btnApplyBreathes_clicked();
+                delay(1);
+            }
+
+            //w->powerOff();
+        break;
+
+        case 3: //Correct Procedure (Fibri)
+
+        break;
+
+    }
 }
 MasterControl::~MasterControl()
 {

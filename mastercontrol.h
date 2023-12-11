@@ -21,7 +21,7 @@ class MasterControl : public QObject
     Q_OBJECT
 
 public:
-    MasterControl();
+    MasterControl(Patient*);
     ~MasterControl();
 
     void delay(int n);
@@ -31,6 +31,7 @@ public:
     void analysis();
     void compressions(bool alignment);
     void powerOff();
+    void testAED(int i);
 
     MainWindow* w;
     CompressionSensor* cs;
