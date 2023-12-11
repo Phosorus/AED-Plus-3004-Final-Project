@@ -16,8 +16,6 @@ SOURCES += \
     patient.cpp \
     compressionsensor.cpp \
     heartsensor.cpp \
-    sensorpads.cpp \
-    pads.cpp \
     shockers.cpp \
 
 
@@ -28,8 +26,6 @@ HEADERS += \
     patient.h \
     compressionsensor.h \
     heartsensor.h \
-    sensorpads.h \
-    pads.h \
     shockers.h \
 
 
