@@ -14,22 +14,14 @@ MasterControl::MasterControl()
      shocker = new Shockers();
      w = new MainWindow;
 
-     //remove patient after testing;
-     patient = new Patient(4, true);
-
      hs = new HeartSensor(patient);
      cs = new CompressionSensor();
 
      w->show();
-
-     //connect to all the proper buttons, signals, and slots;
      connect(w, SIGNAL(powerOn()), this, SLOT(startAED()));
 
      connect(w, SIGNAL(attachAdultPads()), this, SLOT(padsApplied()));
      connect(w, SIGNAL(attachChildPads()), this, SLOT(padsAppliedChild()));
-
-     //remember to add child pads attachment
-     //connect(w, SIGNAL(), this, SLOT(padsApplied()));
 
      connect(cs, SIGNAL(sendGoodCompressionSignal()), this, SLOT(goodCompressions()));
      connect(cs, SIGNAL(sendBadCompressionSignal()), this, SLOT(badCompressions()));
@@ -54,6 +46,7 @@ void MasterControl::delay(int n)
 
 
 void MasterControl::startAED(){
+    //User wants to turn AED on
     if(hasPower == false){
         hasPower = true;
         w->changeBatteryLevel(battery->getCharge());
@@ -72,6 +65,7 @@ void MasterControl::startAED(){
             firstHalfSteps();
         }
     }
+    //User wants to turn AED off
     else{
         numBreaths = 0;
         numCompressions = 0;
@@ -90,7 +84,9 @@ int MasterControl::diagnostics(){
         return 0;
     }
     //check each component for working
-
+    if(shocker->getWorking()==false && w->working==false && cs->getWorking()==false && hs->getWorking()==false){
+        return 1;
+    }
     //if one is false, return false;
     return 2;
 }

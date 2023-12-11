@@ -14,7 +14,3 @@ int Patient::setHeartCondition(int condition){
     this->condition = condition;
     return this->condition;
 }
-
-bool Patient::isChild(){
-    return this->child;
-}

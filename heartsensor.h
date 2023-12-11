@@ -8,11 +8,11 @@ class HeartSensor : public QObject
 {
         Q_OBJECT
 private:
-    bool working;
     Patient* patient;
 
 public:
     HeartSensor(Patient* patient);
+    bool working;
     bool getWorking(); // check if this part is working
     int getPatientCondition(); //get patient condition
 };

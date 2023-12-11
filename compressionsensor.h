@@ -8,10 +8,9 @@
 class CompressionSensor : public QObject
 {
     Q_OBJECT
-private:
-    bool working;
 
 public:
+    bool working;
     CompressionSensor();
     bool getWorking(); // check if this part is working
 

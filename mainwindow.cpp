@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lblStep5->setEnabled(false);
     ui->lblStep6->setEnabled(false);
     counter = 0;
-
+    isWorking = true;
     connect(ui->btnApplyGoodCompression, SIGNAL(clicked()), this, SLOT(goodCompressionPressed()));
 
     // Initialize timer
@@ -37,9 +37,8 @@ void MainWindow::delay(int n)
     while (QTime::currentTime() < dieTime)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 }
-/*
- * Need to create a function that cycles through the AED Process (probably in the AED controller)
-*/
+
+//Sends a signal to the master control that the power button has been pressed (turn on/ turn off)
 void MainWindow::on_btnPowerButton_clicked()
 {
     QString s = "Powering On!";
@@ -48,14 +47,9 @@ void MainWindow::on_btnPowerButton_clicked()
     ui->ActionLog->append(s);
 
     powerOn();
-    /*
-    Need to check power level
-    Only after the power is on can you use the unit
-    Second step is to check status of AED
-    if power level not sufficient indicate audio msg
-    */
 }
 
+//Recieves signal from master control and resets the UI for the case of power off
 void MainWindow::powerOff(){
     QString s = "Powering Off!";
     s = "\"" + s +"\"";
@@ -64,6 +58,8 @@ void MainWindow::powerOff(){
 
     resetUI();
 }
+
+//Recieves signal from master control and displays appropriate visuals for the case of 'low battery'
 void MainWindow::lowBattery(int c){
     QString s = "▯";
     s = s +  QString::number(c) +"%";
@@ -78,6 +74,7 @@ void MainWindow::lowBattery(int c){
     ui->lblLED_Display->setText("CHANGE BATTERY");
 }
 
+//Helper function called to reset the majority of the UI to base state
 void MainWindow::resetUI(){
     ui->lblStep1->setEnabled(false);
     ui->lblStep2->setEnabled(false);
@@ -108,6 +105,8 @@ void MainWindow::resetUI(){
     ui->grpPadOptions->hide();
     ui->grpTreatmentOptions->hide();
 }
+
+//Recieves a value from the master control depending on operational status. Updates the appropriate visuals to reflect this
 void MainWindow::statusCheck(bool operational){
     if(operational){
         ui->lblGoodStatus->setStyleSheet("font-weight: bold; font-size: 50px; color: rgb(45, 255, 0);");
@@ -130,11 +129,11 @@ void MainWindow::statusCheck(bool operational){
         ui->ActionLog->append(s);
     }
 }
-void MainWindow::on_btnShockIndicator_clicked()
-{
-    shock();
-}
 
+//Sends a signal to the master control to initiate a shock to the patient
+void MainWindow::on_btnShockIndicator_clicked(){shock();}
+
+//Takes a value from the master control and displays the appropriate audio message into the ActionLog
 void MainWindow::aedMessages(int i){
     if(i == 1){
         QString s = "Poor compression detected, please adjust!";
@@ -236,6 +235,8 @@ void MainWindow::aedMessages(int i){
         ui->ActionLog->append(s);
     }
 }
+
+//Signal from the master control which updates the UI to reflect the shock pads are ready
 void MainWindow::shockReady(){
     ui->btnShockIndicator->setStyleSheet("color: rgb(255, 0, 0); font-size: 45px; font-weight: bold; background-color: rgb(133, 172, 190); border: 4px solid rgb(45, 255, 0); border-radius: 25px;");
     QString s = "Shock Ready!";
@@ -244,6 +245,7 @@ void MainWindow::shockReady(){
     ui->ActionLog->append(s);
 }
 
+//Takes a value from the master control and displays the corresponding graph to reflect the heartsensor's information
 void MainWindow::graphDisplay(int i){
     if(i==0){
         ui->lblLED_Display->clear();
@@ -270,28 +272,35 @@ void MainWindow::graphDisplay(int i){
     }
 }
 
+//Takes a value from the master control to update the battery percentage of the AED
 void MainWindow::changeBatteryLevel(int i){
     QString s = "▮";
     s = s +  QString::number(i) +"%";
     ui->lblBatteryDisplay->setText(s);
 }
 
+//Takes in a value from the master control and displays the current number of good compressions performed
 void MainWindow::changeCompressionCount(int i){
     QString s = "Compressions: ";
     s = s +  QString::number(i);
     ui->lblCompressionCount->setText(s);
 }
+
+//Takes in a value from the master control and displays the current number of breaths performed
 void MainWindow::changeBreathCount(int i){
     QString s = "Breaths: ";
     s = s +  QString::number(i);
     ui->lblBreathCount->setText(s);
 }
+
+//Takes in a value from the master control and displays the current number of shocks
 void MainWindow::changeShockCount(int i){
     QString s = "Shocks: ";
     s = s +  QString::number(i);
     ui->lblShockCount->setText(s);
 }
 
+//Takes a value from the master control and toggles the indicator around the user's action button to apply compressions
 void MainWindow::compressionToggle(bool t){
     if(t==true){
         ui->btnApplyGoodCompression->setStyleSheet("font-size: 13px;color: rgb(0, 0, 0);font-weight: bold;border: 4px solid  rgb(45, 255, 0);border-radius: 6px;background-color: rgb(255, 255, 255);");
@@ -302,6 +311,7 @@ void MainWindow::compressionToggle(bool t){
     }
 }
 
+//Takes a value from the master control and toggles the indicator around the user's action button to apply breath
 void MainWindow::breathToggle(bool t){
     if(t==true){
         ui->btnApplyBreathes->setStyleSheet("font-size: 13px;color: rgb(0, 0, 0);font-weight: bold;border: 4px solid  rgb(45, 255, 0);border-radius: 6px;background-color: rgb(255, 255, 255);");
@@ -309,6 +319,8 @@ void MainWindow::breathToggle(bool t){
         ui->btnApplyBreathes->setStyleSheet("font-size: 13px;color: rgb(0, 0, 0);font-weight: bold;border: 4px solid  rgb(175, 193, 204);border-radius: 6px;background-color: rgb(255, 255, 255);");
     }
 }
+
+//Takes a value from the master control and toggles the appropriate UI elements for each AED step. Displays the audio messages into ActionLog
 void MainWindow::stepIndicator(int i){
     if(i==1){
         ui->grpUserActions->show();
@@ -415,7 +427,7 @@ void MainWindow::stepIndicator(int i){
     }
 }
 
-
+//User's action button to check up on the patient. Displays the audio message into ActionLog
 void MainWindow::on_btnCheckPatient_clicked()
 {
     QString s = "Are you alright?";
@@ -425,7 +437,7 @@ void MainWindow::on_btnCheckPatient_clicked()
     ui->btnCheckPatient->setEnabled(false);
 }
 
-
+//User's action button to call for help. Displays the audio message into ActionLog
 void MainWindow::on_btnCallHelp_clicked()
 {
     QString s = "Calls for help";
@@ -435,6 +447,7 @@ void MainWindow::on_btnCallHelp_clicked()
     ui->btnCallHelp->setEnabled(false);
 }
 
+//User's action button to perform a good compression. Also displays the time between 'good compressions'
 void MainWindow::goodCompressionPressed() {
     QString s = "Applies good chest compression";
     s = "*" + s +"*";
@@ -447,6 +460,8 @@ void MainWindow::goodCompressionPressed() {
 
     applyGoodCompressions();
 }
+
+//Helper function for goodCompressionPressed that keeps track of time in milliseconds between button presses
 void MainWindow::updateTimer() {
     QTime currentTime = QTime::currentTime();
     int elapsed = startTime.msecsTo(currentTime); // Calculate elapsed seconds
@@ -455,10 +470,13 @@ void MainWindow::updateTimer() {
     ui->btnApplyGoodCompression->setText(QString(s));
 }
 
+//Helper function used by MasterControl on the last compression of the CPR set to stop timer
 void MainWindow::stopTimer(){
     timer->stop();
     ui->btnApplyGoodCompression->setText("Good Compression");
 }
+
+//User's action button to perform a bad compression.
 void MainWindow::on_btnApplyBadCompression_clicked()
 {
     QString s = "Applies bad chest compression";
@@ -468,6 +486,8 @@ void MainWindow::on_btnApplyBadCompression_clicked()
 
     applyBadCompressions();
 }
+
+//User's action button to perform a breath.
 void MainWindow::on_btnApplyBreathes_clicked()
 {
     QString s = "Applies breath";
@@ -477,7 +497,7 @@ void MainWindow::on_btnApplyBreathes_clicked()
     applyBreaths();
 }
 
-
+//User's action button to attach adult pads to patient. Updates the visual on AED to reflect this
 void MainWindow::on_btnAttachAdultPads_clicked()
 {
     ui->lblAdult->setStyleSheet("font-weight: bold; font-size: 18px; color: rgb(45, 255, 0);");
@@ -487,12 +507,10 @@ void MainWindow::on_btnAttachAdultPads_clicked()
     s = "USER: " + s;
     ui->ActionLog->append(s);
 
-    //Maybe update the value of the AED class to reflect what pad is attached
-    //send attach symbols
     attachAdultPads();
 }
 
-
+//User's action button to attach child pads to patient. Updates the visual on AED to reflect this
 void MainWindow::on_btnAttachChildPads_clicked()
 {
     ui->lblAdult->setStyleSheet("font-weight: bold; font-size: 18px; color: rgb(255, 255, 255);");
@@ -505,9 +523,6 @@ void MainWindow::on_btnAttachChildPads_clicked()
     attachChildPads();
 }
 
-
-void MainWindow::on_btnChangeBattery_clicked()
-{
-    changeBattery();
-}
+//User's action button to change the battery
+void MainWindow::on_btnChangeBattery_clicked(){changeBattery();}
 

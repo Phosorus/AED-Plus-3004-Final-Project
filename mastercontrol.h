@@ -57,6 +57,7 @@ private:
     int numShocks = 0;
     int cprRounds = 0;
 
+    bool isChild = false;
     bool hasPower = false;
 
     Shockers* shocker;

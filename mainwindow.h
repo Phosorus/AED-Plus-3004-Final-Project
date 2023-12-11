@@ -36,6 +36,7 @@ public:
     void shockReady();
     void changeShockCount(int i);
     void resetUI();
+    bool working;
 
 public slots:
     void on_btnPowerButton_clicked();
