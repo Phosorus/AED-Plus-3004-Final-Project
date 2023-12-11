@@ -13,7 +13,6 @@ public:
 
     int getHeartCondition();
     int setHeartCondition(int condition);
-    bool isChild();
 
 private:
     int condition;
