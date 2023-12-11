@@ -22,6 +22,7 @@ public:
     ~MainWindow();
     void delay(int n);
     void lowBattery();
+    void powerOff();
     void aedMessages(int i);
     void stepIndicator(int step);
     void changeBatteryLevel(int i);

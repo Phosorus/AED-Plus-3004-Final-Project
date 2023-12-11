@@ -9,7 +9,7 @@ MasterControl::MasterControl()
      w = new MainWindow;
 
      //remove patient after testing;
-     patient = new Patient(1, false);
+     patient = new Patient(1, true);
 
      hs = new HeartSensor(patient);
      cs = new CompressionSensor();
@@ -46,20 +46,31 @@ void MasterControl::delay(int n)
 
 
 void MasterControl::startAED(){
-    w->changeBatteryLevel(battery->getCharge());
-    //If AED does not have sufficient charge
-    if(diagnostics()==0){
-        w->lowBattery();
+    if(hasPower == false){
+        hasPower = true;
+        w->changeBatteryLevel(battery->getCharge());
+        //If AED does not have sufficient charge
+        if(diagnostics()==0){
+            w->lowBattery();
+        }
+        //Hardware issue detected
+        else if (diagnostics()==1){
+            w->statusCheck(false);
+        }
+        //Good condition to begin
+        else{
+            //First half of the AED steps
+             w->statusCheck(true);
+            firstHalfSteps();
+        }
     }
-    //Hardware issue detected
-    else if (diagnostics()==1){
-        w->statusCheck(false);
-    }
-    //Good condition to begin
     else{
-        //First half of the AED steps
-         w->statusCheck(true);
-        firstHalfSteps();
+        numBreaths = 0;
+        numCompressions = 0;
+        numShocks = 0;
+        hasPower = false;
+        w->powerOff();
+
     }
 }
 

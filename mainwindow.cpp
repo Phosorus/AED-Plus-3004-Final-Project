@@ -35,6 +35,11 @@ void MainWindow::delay(int n)
 */
 void MainWindow::on_btnPowerButton_clicked()
 {
+    QString s = "Powering On!";
+    s = "\"" + s +"\"";
+    s = "AED: " + s;
+    ui->ActionLog->append(s);
+
     powerOn();
     /*
     Need to check power level
@@ -44,7 +49,42 @@ void MainWindow::on_btnPowerButton_clicked()
     */
 }
 
+void MainWindow::powerOff(){
+    QString s = "Powering Off!";
+    s = "\"" + s +"\"";
+    s = "AED: " + s;
+    ui->ActionLog->append(s);
+
+    ui->lblStep1->setEnabled(false);
+    ui->lblStep2->setEnabled(false);
+    ui->lblStep3->setEnabled(false);
+    ui->lblStep4->setEnabled(false);
+    ui->lblStep5->setEnabled(false);
+    ui->lblStep6->setEnabled(false);
+    ui->lblStep1->setStyleSheet("border: 4px solid  rgb(175, 193, 204); border-radius: 6px;");
+    ui->lblStep2->setStyleSheet("border: 4px solid  rgb(175, 193, 204); border-radius: 6px;");
+    ui->lblStep3->setStyleSheet("border: 4px solid  rgb(175, 193, 204); border-radius: 6px;");
+    ui->lblStep4->setStyleSheet("border: 4px solid  rgb(175, 193, 204); border-radius: 6px;");
+    ui->lblStep5->setStyleSheet("border: 4px solid  rgb(175, 193, 204); border-radius: 6px;");
+    ui->lblStep6->setStyleSheet("border: 4px solid  rgb(175, 193, 204); border-radius: 6px;");
+    ui->lblGoodStatus->setStyleSheet("font-weight: bold; font-size: 50px;");
+    ui->lblBadStatus->setStyleSheet("font-weight: bold; font-size: 46px;");
+    ui->lblBatteryDisplay->clear();
+    ui->lblShockCount->clear();
+    ui->lblCompressionCount->clear();
+    ui->lblBreathCount->clear();
+    ui->lblLED_Display->clear();
+    ui->lblHeartSignal->clear();
+    compressionToggle(false);
+    breathToggle(false);
+    ui->btnShockIndicator->setStyleSheet("color: rgb(255, 0, 0); font-size: 45px; font-weight: bold; background-color: rgb(133, 172, 190); border: 4px solid rgb(175, 193, 204); border-radius: 25px;");
+    ui->grpPadOptions->hide();
+    ui->grpTreatmentOptions->hide();
+}
 void MainWindow::lowBattery(){
+    QString s = "▯";
+    s = s +  QString::number(0) +"%";
+    ui->lblBatteryDisplay->setText(s);
     ui->lblLED_Display->setStyleSheet("font-weight: bold; font-size: 30px; background-color: rgb(0, 0, 0);border: 2px solid rgb(0,0,0);");
     ui->lblGoodStatus->setStyleSheet("font-weight: bold; font-size: 50px;");
     ui->lblBadStatus->setStyleSheet("font-weight: bold; font-size: 46px; color: rgb(255, 0, 0);");
@@ -420,6 +460,5 @@ void MainWindow::on_btnAttachChildPads_clicked()
     ui->ActionLog->append(s);
 
     attachChildPads();
-
-    //Maybe update the value of the AED class to reflect what pad is attached
 }
+

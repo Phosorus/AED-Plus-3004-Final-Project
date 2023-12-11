@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>808</width>
+    <width>1199</width>
     <height>745</height>
    </rect>
   </property>
@@ -673,10 +673,10 @@ font-size: 18px</string>
    <widget class="QGroupBox" name="grpAEDView_2">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>340</y>
-      <width>301</width>
-      <height>341</height>
+      <x>810</x>
+      <y>20</y>
+      <width>371</width>
+      <height>661</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -713,8 +713,8 @@ border-radius: 20px;</string>
       <rect>
        <x>10</x>
        <y>30</y>
-       <width>281</width>
-       <height>301</height>
+       <width>351</width>
+       <height>611</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -960,7 +960,7 @@ background-color: rgb(255, 255, 255);</string>
      <rect>
       <x>20</x>
       <y>0</y>
-      <width>791</width>
+      <width>1161</width>
       <height>21</height>
      </rect>
     </property>
@@ -985,9 +985,9 @@ background-color: rgb(255, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>790</x>
-      <y>20</y>
+      <y>10</y>
       <width>20</width>
-      <height>661</height>
+      <height>671</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -1013,7 +1013,7 @@ background-color: rgb(255, 255, 255);</string>
      <rect>
       <x>20</x>
       <y>680</y>
-      <width>791</width>
+      <width>1161</width>
       <height>21</height>
      </rect>
     </property>
@@ -1201,13 +1201,149 @@ font-size: 46px</string>
      </property>
     </widget>
    </widget>
+   <widget class="QLabel" name="lblBorder3_2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>1180</x>
+      <y>0</y>
+      <width>20</width>
+      <height>701</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(176, 214, 21);
+
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::PlainText</enum>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="grpUserActions_2">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>340</y>
+      <width>301</width>
+      <height>331</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(119, 118, 123);
+color: rgb(255, 255, 255);
+font-weight: bold;</string>
+    </property>
+    <property name="title">
+     <string>Test Cases</string>
+    </property>
+    <widget class="QPushButton" name="btnPowerButton_5">
+     <property name="geometry">
+      <rect>
+       <x>400</x>
+       <y>580</y>
+       <width>41</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(175, 193, 204);
+font-size: 45px;
+font-weight: bold;
+background-color: rgb(133, 172, 190);
+border: 4px solid rgb(175, 193, 204);
+border-radius: 20px;</string>
+     </property>
+     <property name="text">
+      <string>O</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnTest1_2">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>30</y>
+       <width>61</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(0, 0, 0);
+font-weight: bold;
+border: 4px solid  rgb(175, 193, 204);
+border-radius: 6px;
+background-color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>Start</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>91</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(0, 0, 0);
+font-weight: bold;
+border: 4px solid  rgb(175, 193, 204);
+border-radius: 6px;
+background-color: rgb(255, 255, 255);</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>Test 1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Test 2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Test 3</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QTextBrowser" name="testDescription">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>281</width>
+       <height>271</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 255, 255);
+font-weight: normal;
+color: rgb(0, 0, 0);</string>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>808</width>
+     <width>1199</width>
      <height>22</height>
     </rect>
    </property>
