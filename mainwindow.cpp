@@ -217,6 +217,11 @@ void MainWindow::changeBreathCount(int i){
     s = s +  QString::number(i);
     ui->lblBreathCount->setText(s);
 }
+void MainWindow::changeShockCount(int i){
+    QString s = "Shocks: ";
+    s = s +  QString::number(i);
+    ui->lblShockCount->setText(s);
+}
 
 void MainWindow::compressionToggle(bool t){
     if(t==true){

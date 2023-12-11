@@ -32,6 +32,7 @@ public:
     void graphDisplay(int i);
     void statusCheck(bool);
     void shockReady();
+    void changeShockCount(int i);
 
 public slots:
     void on_btnPowerButton_clicked();
