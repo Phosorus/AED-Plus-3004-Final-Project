@@ -327,7 +327,7 @@ void MasterControl::testAED(int i){
             w->powerOn();
             delay(5);
 
-            //w->powerOff();
+            w->powerOff();
 
         break;
         case 1: //Component Failure
@@ -339,7 +339,7 @@ void MasterControl::testAED(int i){
             delay(5);
 
         break;
-        case 2: //Correct Procedure (Adult, Tachycardia)
+        case 2: //Correct Procedure (Shockable)
             delay(5);
 
             w->on_btnPowerButton_clicked();
@@ -352,25 +352,203 @@ void MasterControl::testAED(int i){
 
             delay(7);
 
-            for(int i = 0; i < 30; i++){
-                w->goodCompressionPressed();
-                qDebug() << "Triggered";
-                delay(1);
+            for(int k = 0; k < SUFFICIENT_CPR_ROUNDS; k++)
+            {
+                for(int i = 0; i < SUFFICIENT_COMPRESSIONS; i++){
+                    w->goodCompressionPressed();
+                    //qDebug() << "Triggered";
+                    delay(1.1);
+                }
+
+                delay(2);
+
+                for(int i = 0; i < SUFFICIENT_BREATHS; i++){
+                    w->on_btnApplyBreathes_clicked();
+                    delay(1.1);
+                }
+
+                delay(2);
             }
 
-            delay(2);
+            delay(5);
 
-            for(int i = 0; i < 2; i++){
-                w->on_btnApplyBreathes_clicked();
-                delay(1);
+            w->on_btnPowerButton_clicked();
+        break;
+
+        case 3: //Correct Procedure (Non-Shockable)
+            delay(5);
+
+            w->on_btnPowerButton_clicked();
+            delay(5);
+
+            w->on_btnAttachAdultPads_clicked();
+            delay(5);
+
+            for(int k = 0; k < SUFFICIENT_CPR_ROUNDS; k++)
+            {
+                for(int i = 0; i < SUFFICIENT_COMPRESSIONS; i++){
+                    w->goodCompressionPressed();
+                    //qDebug() << "Triggered";
+                    delay(1.1);
+                }
+
+                delay(2);
+
+                for(int i = 0; i < SUFFICIENT_BREATHS; i++){
+                    w->on_btnApplyBreathes_clicked();
+                    delay(1.1);
+                }
+
+                delay(2);
             }
 
-            //w->powerOff();
+            delay(5);
+
+            w->on_btnPowerButton_clicked();
         break;
 
-        case 3: //Correct Procedure (Fibri)
+        case 4: //Correct Procedure (Stable)
+
+            delay(5);
+
+            w->on_btnPowerButton_clicked();
+            delay(5);
+
+            w->on_btnAttachAdultPads_clicked();
+            delay(5);
+
+            delay(15);
+
+            w->on_btnPowerButton_clicked();
 
         break;
+
+        case 5: //shockable child
+            delay(5);
+
+            w->on_btnPowerButton_clicked();
+            delay(5);
+
+            w->on_btnAttachChildPads_clicked();
+            delay(5);
+
+            w->on_btnShockIndicator_clicked();
+
+            delay(7);
+
+            for(int k = 0; k < SUFFICIENT_CPR_ROUNDS; k++)
+            {
+                for(int i = 0; i < SUFFICIENT_COMPRESSIONS; i++){
+                    w->goodCompressionPressed();
+                    //qDebug() << "Triggered";
+                    delay(1.1);
+                }
+
+                delay(2);
+
+                for(int i = 0; i < SUFFICIENT_BREATHS; i++){
+                    w->on_btnApplyBreathes_clicked();
+                    delay(1.1);
+                }
+
+                delay(2);
+            }
+
+            delay(5);
+
+            w->on_btnPowerButton_clicked();
+        break;
+
+        case 6: //pannels disconnected
+
+        break;
+
+        case 7: //depleted to critical  state
+            delay(5);
+
+            w->on_btnPowerButton_clicked();
+            delay(5);
+
+            w->on_btnAttachChildPads_clicked();
+            delay(5);
+
+            w->on_btnShockIndicator_clicked();
+
+            delay(7);
+
+            for(int k = 0; k < SUFFICIENT_CPR_ROUNDS; k++)
+            {
+                for(int i = 0; i < SUFFICIENT_COMPRESSIONS; i++){
+                    w->goodCompressionPressed();
+                    //qDebug() << "Triggered";
+                    delay(1.1);
+                }
+
+                delay(2);
+
+                for(int i = 0; i < SUFFICIENT_BREATHS; i++){
+                    w->on_btnApplyBreathes_clicked();
+                    delay(1.1);
+                }
+
+                delay(2);
+            }
+
+            delay(6);
+
+            w->on_btnShockIndicator_clicked();
+
+            delay(7);
+
+            for(int k = 0; k < SUFFICIENT_CPR_ROUNDS; k++)
+            {
+                for(int i = 0; i < SUFFICIENT_COMPRESSIONS; i++){
+                    w->goodCompressionPressed();
+                    //qDebug() << "Triggered";
+                    delay(1.1);
+                }
+
+                delay(2);
+
+                for(int i = 0; i < SUFFICIENT_BREATHS; i++){
+                    w->on_btnApplyBreathes_clicked();
+                    delay(1.1);
+                }
+
+                delay(2);
+            }
+
+            delay(5);
+
+            w->on_btnShockIndicator_clicked();
+
+            delay(7);
+
+            for(int k = 0; k < SUFFICIENT_CPR_ROUNDS; k++)
+            {
+                for(int i = 0; i < SUFFICIENT_COMPRESSIONS; i++){
+                    w->goodCompressionPressed();
+                    //qDebug() << "Triggered";
+                    delay(1.1);
+                }
+
+                delay(2);
+
+                for(int i = 0; i < SUFFICIENT_BREATHS; i++){
+                    w->on_btnApplyBreathes_clicked();
+                    delay(1.1);
+                }
+
+                delay(2);
+            }
+
+            delay(5);
+
+
+            w->on_btnPowerButton_clicked();
+
+            break;
+
 
     }
 }

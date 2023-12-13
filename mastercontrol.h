@@ -52,7 +52,7 @@ private:
     QDateTime prevCompressionTime;
     QDateTime curCompressionTime;
     bool currentlyShockable = false;
-    bool currentlyUnstable = true;
+    bool currentlyUnstable = false;
     int numCompressions = 0;
     int numBreaths = 0;
     int numShocks = 0;
