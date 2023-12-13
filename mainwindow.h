@@ -36,6 +36,7 @@ public:
     void shockReady();
     void changeShockCount(int i);
     void resetUI();
+    int getTestSelection();
     bool working;
 
 public slots:
@@ -63,9 +64,14 @@ signals:
     void applyBadCompressions();
     void applyBreaths();
     void changeBattery();
+    void sendTestSignal();
 
 private slots:
     void on_btnChangeBattery_clicked();
+
+    void on_btnStartTest_clicked();
+
+    void on_cbTests_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;

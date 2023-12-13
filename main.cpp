@@ -31,9 +31,7 @@ int main(int argc, char* argv[])
 
     MasterControl* AED = new MasterControl(patientList[currentPatient]);
 
-    AED->testAED(2);
-
-    delete[] patientList;
-    delete AED;
+    //delete[] patientList;
+    //delete AED;
     return a.exec();
 }

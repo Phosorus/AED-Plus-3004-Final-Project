@@ -6,7 +6,7 @@
 #define SUFFICIENT_COMPRESSIONS 5
 #define SUFFICIENT_BREATHS 2
 
-#define LOWER_COMPRESSION_RANGE 1000
+#define LOWER_COMPRESSION_RANGE 900
 #define UPPER_COMPRESSION_RANGE 2000
 MasterControl::MasterControl(Patient* patient)
 {
@@ -22,6 +22,7 @@ MasterControl::MasterControl(Patient* patient)
 
      connect(w, SIGNAL(attachAdultPads()), this, SLOT(padsApplied()));
      connect(w, SIGNAL(attachChildPads()), this, SLOT(padsAppliedChild()));
+     connect(w, SIGNAL(sendTestSignal()), this, SLOT(startTest()));
 
      connect(cs, SIGNAL(sendGoodCompressionSignal()), this, SLOT(goodCompressions()));
      connect(cs, SIGNAL(sendBadCompressionSignal()), this, SLOT(badCompressions()));
@@ -31,6 +32,7 @@ MasterControl::MasterControl(Patient* patient)
      connect(w, SIGNAL(applyBadCompressions()), cs, SLOT(badCompressionsSlot()));
      connect(w, SIGNAL(applyBreaths()), cs, SLOT(breathsSlot()));
      connect(w, SIGNAL(shock()), this, SLOT(shock()));
+
 
      connect(w, SIGNAL(changeBattery()), this, SLOT(changeBattery()));
 
@@ -316,12 +318,17 @@ void MasterControl::changeBattery(){
     w->powerOff();
 }
 
+void MasterControl::startTest(){
+    qDebug() << "start test";
+    qDebug() << QString::number(w->getTestSelection());
+    testAED(w->getTestSelection());
+}
 void MasterControl::testAED(int i){
     switch(i){
         case 0: //Battery Failure
 
             //setup battery low power
-                battery->deplete(90);
+            battery->deplete(90);
 
             delay(10);
             w->powerOn();
@@ -505,14 +512,14 @@ void MasterControl::testAED(int i){
                 for(int i = 0; i < SUFFICIENT_COMPRESSIONS; i++){
                     w->goodCompressionPressed();
                     //qDebug() << "Triggered";
-                    delay(1.1);
+                    delay(1);
                 }
 
                 delay(2);
 
                 for(int i = 0; i < SUFFICIENT_BREATHS; i++){
                     w->on_btnApplyBreathes_clicked();
-                    delay(1.1);
+                    delay(1);
                 }
 
                 delay(2);
@@ -529,14 +536,14 @@ void MasterControl::testAED(int i){
                 for(int i = 0; i < SUFFICIENT_COMPRESSIONS; i++){
                     w->goodCompressionPressed();
                     //qDebug() << "Triggered";
-                    delay(1.1);
+                    delay(1);
                 }
 
                 delay(2);
 
                 for(int i = 0; i < SUFFICIENT_BREATHS; i++){
                     w->on_btnApplyBreathes_clicked();
-                    delay(1.1);
+                    delay(1);
                 }
 
                 delay(2);

@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lblStep4->setEnabled(false);
     ui->lblStep5->setEnabled(false);
     ui->lblStep6->setEnabled(false);
+    ui->cbTests->setCurrentIndex(0);
     counter = 0;
     working = true;
     connect(ui->btnApplyGoodCompression, SIGNAL(clicked()), this, SLOT(goodCompressionPressed()));
@@ -527,4 +528,41 @@ void MainWindow::on_btnAttachChildPads_clicked()
 void MainWindow::on_btnChangeBattery_clicked(){changeBattery();}
 
 
+int MainWindow::getTestSelection(){return ui->cbTests->currentIndex();}
+
+void MainWindow::on_btnStartTest_clicked()
+{
+    sendTestSignal();
+}
+
+
+void MainWindow::on_cbTests_currentIndexChanged(int index)
+{
+    ui->testDescription->clear();
+
+    if(index==0){
+        ui->testDescription->append("Low Battery Test");
+    }
+    if(index==1){
+        ui->testDescription->append("Component Failure");
+    }
+    if(index==2){
+        ui->testDescription->append("Correct Procedure (Shockable)");
+    }
+    if(index==3){
+        ui->testDescription->append("Correct Procedure (Non-Shockable)");
+    }
+    if(index==4){
+        ui->testDescription->append("Correct Procedure (Stable)");
+    }
+    if(index==5){
+        ui->testDescription->append("Shockable Child");
+    }
+    if(index==6){
+        ui->testDescription->append("Pannels disconnected");
+    }
+    if(index==7){
+        ui->testDescription->append("Depleted to critical state");
+    }
+}
 

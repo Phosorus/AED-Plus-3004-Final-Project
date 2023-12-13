@@ -44,6 +44,7 @@ private slots:
     void padsAppliedChild();
     void goodCompressions();
     void badCompressions();
+    void startTest();
     void breaths();
     void shock();
     void changeBattery();
