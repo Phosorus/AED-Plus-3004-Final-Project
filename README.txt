@@ -1,4 +1,4 @@
-COMP 3004 Final Project:
+COMP 3004 Final Project Team 9:
 
 Group Member Contributions
 Eric Tran - Designed UI and assisted in some backend mastercontrol functionality
