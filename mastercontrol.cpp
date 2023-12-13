@@ -129,7 +129,7 @@ void MasterControl::analysis(){
     else{
         //reset breaths & compressions
         numCompressions = 0;
-        numBreaths = 0;
+        numBreaths = 0;        
 
 
         w->changeCompressionCount(numCompressions);
@@ -160,10 +160,12 @@ void MasterControl::analysis(){
             case 3: //normal
                 //display normal graph
                 w->graphDisplay(1);
+                currentlyShockable = false;
                 currentlyUnstable =  false;
                 break;
             case 4: //asystole
                 w->graphDisplay(2);
+                currentlyShockable = false;
                 currentlyUnstable =  true;
                 break;
          }
@@ -360,10 +362,10 @@ void MasterControl::testAED(int i){
 
             w->on_btnPowerButton_clicked();
 
-            delay(5);
+            delay(3);
 
             w->on_btnPowerButton_clicked();
-
+            qDebug() << "resetting";
             shocker->working = true;
             w->working = true;
         break;
@@ -545,7 +547,7 @@ void MasterControl::testAED(int i){
             delay(5);
 
             w->on_btnPowerButton_clicked();
-            delay(5);
+            delay(9);
 
             w->on_btnAttachAdultPads_clicked();
             delay(5);
