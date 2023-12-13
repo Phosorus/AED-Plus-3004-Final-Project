@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 
     int currentPatient = 1;
 
-    MasterControl* AED = new MasterControl(patientList[currentPatient]);
+    MasterControl AED(patientList[currentPatient]);
 
     //delete[] patientList;
     //delete AED;

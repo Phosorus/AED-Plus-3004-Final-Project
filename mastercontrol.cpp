@@ -13,7 +13,7 @@ MasterControl::MasterControl(Patient* patient)
      battery = new Battery(100);
      shocker = new Shockers();
      w = new MainWindow;
-     patient = patient;
+     this->patient = patient;
      hs = new HeartSensor(patient);
      cs = new CompressionSensor();
 
@@ -86,7 +86,7 @@ int MasterControl::diagnostics(){
         return 0;
     }
     //check each component for working
-    if(shocker->getWorking()==false && w->working==false && cs->getWorking()==false && hs->getWorking()==false){
+    if(shocker->getWorking()==false || w->working==false || cs->getWorking()==false || hs->getWorking()==false){
         return 1;
     }
     //if one is false, return false;
@@ -95,11 +95,18 @@ int MasterControl::diagnostics(){
 
 //runs through the first phase of the AED, since they are always consistant and only occur once.
 void MasterControl::firstHalfSteps(){
-    w->stepIndicator(1);
-    delay(3);
-    w->stepIndicator(2);
-    delay(3);
-    w->stepIndicator(3);
+    if(hasPower==true){
+        w->stepIndicator(1);
+        delay(3);
+    }
+    if(hasPower==true){
+        w->stepIndicator(2);
+        delay(3);
+    }
+    if(hasPower==true){
+        w->stepIndicator(3);
+        delay(3);
+    }
 }
 
 //called when pads detect being applied to a person
@@ -123,6 +130,7 @@ void MasterControl::analysis(){
         //reset breaths & compressions
         numCompressions = 0;
         numBreaths = 0;
+
 
         w->changeCompressionCount(numCompressions);
         w->changeBreathCount(numBreaths);
@@ -176,10 +184,14 @@ void MasterControl::analysis(){
             w->breathToggle(false);
         }
         else{//user is non-shockable and stable.
-            w->aedMessages(8);
-            //wait, then re do analysis
-            delay(10);
-            analysis();
+            if(hasPower){
+                w->aedMessages(8);
+                //wait, then re do analysis
+                delay(10);
+            }
+            if(hasPower){
+                analysis();
+            }
         }
     }
 }
@@ -328,31 +340,46 @@ void MasterControl::testAED(int i){
         case 0: //Battery Failure
 
             //setup battery low power
-            battery->deplete(90);
+                battery->deplete(90);
 
-            delay(10);
+            delay(5);
             w->powerOn();
             delay(5);
 
             w->powerOff();
+            battery->change();
 
         break;
+
         case 1: //Component Failure
 
-            //setup faulty components
-                //
+            //setup faulty component
 
-            w->powerOn();
-            delay(5);
+            shocker->working = false;
+            w->working = false;
 
-        break;
-        case 2: //Correct Procedure (Shockable)
+            w->on_btnPowerButton_clicked();
+
             delay(5);
 
             w->on_btnPowerButton_clicked();
+
+            shocker->working = true;
+            w->working = true;
+        break;
+
+        case 2: //Correct Procedure (Shockable)
+            qDebug()<<"0";
+            patient->setHeartCondition(1);
+            qDebug()<<"1";
+            delay(5);
+
+            w->on_btnPowerButton_clicked();
+            qDebug()<<"2";
             delay(5);
 
             w->on_btnAttachAdultPads_clicked();
+            qDebug()<<"3";
             delay(5);
 
             w->on_btnShockIndicator_clicked();
@@ -364,14 +391,14 @@ void MasterControl::testAED(int i){
                 for(int i = 0; i < SUFFICIENT_COMPRESSIONS; i++){
                     w->goodCompressionPressed();
                     //qDebug() << "Triggered";
-                    delay(1.1);
+                    delay(1);
                 }
 
                 delay(2);
 
                 for(int i = 0; i < SUFFICIENT_BREATHS; i++){
                     w->on_btnApplyBreathes_clicked();
-                    delay(1.1);
+                    delay(1);
                 }
 
                 delay(2);
@@ -383,6 +410,9 @@ void MasterControl::testAED(int i){
         break;
 
         case 3: //Correct Procedure (Non-Shockable)
+
+            patient->setHeartCondition(4);
+
             delay(5);
 
             w->on_btnPowerButton_clicked();
@@ -396,14 +426,14 @@ void MasterControl::testAED(int i){
                 for(int i = 0; i < SUFFICIENT_COMPRESSIONS; i++){
                     w->goodCompressionPressed();
                     //qDebug() << "Triggered";
-                    delay(1.1);
+                    delay(1);
                 }
 
                 delay(2);
 
                 for(int i = 0; i < SUFFICIENT_BREATHS; i++){
                     w->on_btnApplyBreathes_clicked();
-                    delay(1.1);
+                    delay(1);
                 }
 
                 delay(2);
@@ -416,6 +446,8 @@ void MasterControl::testAED(int i){
 
         case 4: //Correct Procedure (Stable)
 
+            patient->setHeartCondition(3);
+
             delay(5);
 
             w->on_btnPowerButton_clicked();
@@ -424,13 +456,11 @@ void MasterControl::testAED(int i){
             w->on_btnAttachAdultPads_clicked();
             delay(5);
 
-            delay(15);
-
-            w->on_btnPowerButton_clicked();
-
         break;
 
         case 5: //shockable child
+            patient->setHeartCondition(2);
+
             delay(5);
 
             w->on_btnPowerButton_clicked();
@@ -448,14 +478,14 @@ void MasterControl::testAED(int i){
                 for(int i = 0; i < SUFFICIENT_COMPRESSIONS; i++){
                     w->goodCompressionPressed();
                     //qDebug() << "Triggered";
-                    delay(1.1);
+                    delay(1);
                 }
 
                 delay(2);
 
                 for(int i = 0; i < SUFFICIENT_BREATHS; i++){
                     w->on_btnApplyBreathes_clicked();
-                    delay(1.1);
+                    delay(1);
                 }
 
                 delay(2);
@@ -467,16 +497,57 @@ void MasterControl::testAED(int i){
         break;
 
         case 6: //pannels disconnected
+            patient->setHeartCondition(1);
 
-        break;
-
-        case 7: //depleted to critical  state
             delay(5);
 
             w->on_btnPowerButton_clicked();
             delay(5);
 
-            w->on_btnAttachChildPads_clicked();
+            w->on_btnAttachAdultPads_clicked();
+            delay(5);
+
+            w->on_btnShockIndicator_clicked();
+
+            delay(7);
+
+            patient->setHeartCondition(4);
+
+            for(int k = 0; k < SUFFICIENT_CPR_ROUNDS; k++)
+            {
+                for(int i = 0; i < SUFFICIENT_COMPRESSIONS; i++){
+                    w->goodCompressionPressed();
+                    //qDebug() << "Triggered";
+                    delay(1);
+                }
+
+                delay(2);
+
+                for(int i = 0; i < SUFFICIENT_BREATHS; i++){
+                    w->on_btnApplyBreathes_clicked();
+
+                    delay(1);
+                }
+
+                delay(2);
+            }
+
+            delay(5);
+
+            qDebug() << "Pannels Disconnected";
+
+
+            w->on_btnPowerButton_clicked();
+        break;
+
+        case 7: //depleted to critical state
+            patient->setHeartCondition(1);
+            delay(5);
+
+            w->on_btnPowerButton_clicked();
+            delay(5);
+
+            w->on_btnAttachAdultPads_clicked();
             delay(5);
 
             w->on_btnShockIndicator_clicked();
@@ -488,14 +559,14 @@ void MasterControl::testAED(int i){
                 for(int i = 0; i < SUFFICIENT_COMPRESSIONS; i++){
                     w->goodCompressionPressed();
                     //qDebug() << "Triggered";
-                    delay(1.1);
+                    delay(1);
                 }
 
                 delay(2);
 
                 for(int i = 0; i < SUFFICIENT_BREATHS; i++){
                     w->on_btnApplyBreathes_clicked();
-                    delay(1.1);
+                    delay(1);
                 }
 
                 delay(2);
@@ -553,9 +624,8 @@ void MasterControl::testAED(int i){
 
 
             w->on_btnPowerButton_clicked();
-
+            battery->change();
             break;
-
 
     }
 }

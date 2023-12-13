@@ -6,7 +6,6 @@ class Shockers
 {
 private:
     bool charged;
-    bool working;
     double power = 40;
 public:
     Shockers();
@@ -15,6 +14,7 @@ public:
     bool getCharged();
     bool getWorking(); // check if this part is working
     double getPower();
+    bool working;
     void setPower(double power);
 };
 
