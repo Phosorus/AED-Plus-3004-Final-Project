@@ -33,3 +33,6 @@ UI:
 mainwindow.ui
 
 Assets: Contains the various images used in the UI
+
+Documentation:
+3004 Group Assignment Final.pdf
